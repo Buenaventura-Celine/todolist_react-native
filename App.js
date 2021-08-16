@@ -4,21 +4,31 @@ import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, Vi
 import Task from './components/Task';
 
 export default function App() {
+  const [task, setTask] = useState();
+  const [taskItems, setTaskItems] = useState([]);
+
+  const handleAddTask = () =>{
+    setTaskItems([...taskItems, task])
+    setTask(null);
+  }
   return (
     <View style={styles.container}>
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>Today's Task</Text>
         <View style={styles.item}>
-          <Task text ={'Task 1'}/>
-          <Task text ={'Task 2'}/>
+          {
+            taskItems.map((item, index) =>{
+              return <Task key={index} text={item}></Task>
+            })
+          }
         </View>
       </View>
       <KeyboardAvoidingView 
         behavior={Platform.OS==="ios" ? "padding" : "height"}
         style={styles.writeTaskWrapper}
       >
-        <TextInput style={styles.input}></TextInput>
-        <TouchableOpacity>
+        <TextInput style={styles.input} placeholder={'Write a task'} onChangeText={text => setTask(text)} value={task}></TextInput>
+        <TouchableOpacity onPress={() => handleAddTask()}>
           <View style={styles.addWrapper}>
             <Text style={styles.addText}>+</Text>
           </View>
